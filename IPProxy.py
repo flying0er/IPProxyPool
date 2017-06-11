@@ -1,5 +1,11 @@
 # coding:utf-8
 
+from conf.proxy_conf import GVAR
+from util.logger import GetLogger
+
+lg = GetLogger('ipproxy')
+GVAR["logger"] = lg
+
 from multiprocessing import Value, Queue, Process
 from api.apiServer import start_api_server
 from db.DataStore import store_data
@@ -8,6 +14,7 @@ from validator.Validator import validator, getMyIP
 from spider.ProxyCrawl import startProxyCrawl
 
 from config import TASK_QUEUE_SIZE
+
 
 if __name__ == "__main__":
     myip = getMyIP()

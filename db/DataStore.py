@@ -2,7 +2,9 @@
 import sys
 from config import DB_CONFIG
 from util.exception import Con_DB_Fail
+from conf.proxy_conf import GVAR
 
+lg = GVAR["logger"]
 
 try:
     if DB_CONFIG['DB_CONNECT_TYPE'] == 'pymongo':
@@ -35,15 +37,17 @@ def store_data(queue2, db_proxy_num):
             else:
                 failNum += 1
             str = 'IPProxyPool----->>>>>>>>Success ip num :%d,Fail ip num:%d' % (successNum, failNum)
-            sys.stdout.write(str + "\r")
-            sys.stdout.flush()
+            lg.info(str)
+            #sys.stdout.write(str + "\r")
+            #sys.stdout.flush()
         except BaseException as e:
             if db_proxy_num.value != 0:
                 successNum += db_proxy_num.value
                 db_proxy_num.value = 0
                 str = 'IPProxyPool----->>>>>>>>Success ip num :%d,Fail ip num:%d' % (successNum, failNum)
-                sys.stdout.write(str + "\r")
-                sys.stdout.flush()
+                lg.info(str)
+                #sys.stdout.write(str + "\r")
+                #sys.stdout.flush()
                 successNum = 0
                 failNum = 0
 

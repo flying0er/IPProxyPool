@@ -16,6 +16,10 @@ from spider.HtmlDownloader import Html_Downloader
 from spider.HtmlPraser import Html_Parser
 from validator.Validator import validator, getMyIP, detect_from_db
 
+from conf.proxy_conf import GVAR
+
+lg = GVAR["logger"]
+
 '''
 这个类的作用是描述爬虫的逻辑
 '''
@@ -40,8 +44,9 @@ class ProxyCrawl(object):
         while True:
             self.proxies.clear()
             str = 'IPProxyPool----->>>>>>>>beginning'
-            sys.stdout.write(str + "\r\n")
-            sys.stdout.flush()
+            lg.info(str)
+            #sys.stdout.write(str + "\r\n")
+            #sys.stdout.flush()
             proxylist = sqlhelper.select()
 
             spawns = []
@@ -56,8 +61,9 @@ class ProxyCrawl(object):
 
             if len(self.proxies) < MINNUM:
                 str += '\r\nIPProxyPool----->>>>>>>>now ip num < MINNUM,start crawling...'
-                sys.stdout.write(str + "\r\n")
-                sys.stdout.flush()
+                lg.info(str)
+                #sys.stdout.write(str + "\r\n")
+                #sys.stdout.flush()
                 spawns = []
                 for p in parserList:
                     spawns.append(gevent.spawn(self.crawl, p))
@@ -67,8 +73,9 @@ class ProxyCrawl(object):
                 gevent.joinall(spawns)
             else:
                 str += '\r\nIPProxyPool----->>>>>>>>now ip num meet the requirement,wait UPDATE_TIME...'
-                sys.stdout.write(str + "\r\n")
-                sys.stdout.flush()
+                lg.info(str)
+                #sys.stdout.write(str + "\r\n")
+                #sys.stdout.flush()
 
             time.sleep(UPDATE_TIME)
 
